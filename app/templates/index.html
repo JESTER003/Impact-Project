@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Main Page{% endblock %}
+
+{% block content %}
+<div class="">
+    <div class="text-black py-10">
+        <h1 class="text-4xl font-extrabold mb-5">Welcome to the DevTools</h1>
+        <p class="text-lg mb-5">Explore a collection of tools designed to enhance your productivity and streamline your
+            workflow.</p>
+        <div class="space-x-4">
+            <button class="bg-blue-700 hover:bg-blue-800 text-black px-4 py-2 rounded"
+                onclick="location.href='/url-shortener'">URL Shortener</button>
+            <button class="bg-green-700 hover:bg-green-800 text-black px-4 py-2 rounded"
+                onclick="location.href='/todo'">To-Do App</button>
+            <button class="bg-purple-700 hover:bg-purple-800 text-black px-4 py-2 rounded"
+                onclick="location.href='/chat'">Realtime Chat-App</button>
+        </div>
+    </div>
+
+    <div class="container text-black mx-auto px-4 py-10">
+        <h2 class="text-3xl font-bold mb-4">Project Details</h2>
+        <p class="text-lg mb-4">This project is a demonstration of various web tools built using Flask and Tailwind CSS.
+            Each tool showcases different functionalities and concepts:</p>
+        <ul class="list-disc list-inside text-lg">
+            <li><strong>URL Shortener:</strong> Convert long URLs into short, manageable links using hashing techniques.
+            </li>
+            <li><strong>To-Do App:</strong> Manage your tasks efficiently with a stack-based approach.</li>
+            <li><strong>Realtime Chat-App:</strong> Engage in real-time communication using graph-based concepts.</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

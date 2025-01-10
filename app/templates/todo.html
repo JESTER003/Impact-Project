@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}To-Do App{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-5">To-Do App</h1>
+<p class="mb-5 text-lg">
+    This To-Do app uses the stack data structure to manage tasks. A stack is a collection of elements with two main operations: <strong>push</strong> and <strong>pop</strong>. 
+    <ul class="list-disc list-inside">
+        <li><strong>Push:</strong> When you add a new task, it is placed on top of the stack. This means the most recently added task is always at the top, ready to be completed first.</li>
+        <li><strong>Pop:</strong> When you mark a task as completed, it is removed from the top of the stack. This follows the Last In, First Out (LIFO) principle, where the last task added is the first to be removed.</li>
+    </ul>
+    This approach is useful for managing tasks that need to be addressed in the order they were added, ensuring that the most recent tasks are prioritized.
+</p>
+
+<form method="POST" action="/todo" class="my-5">
+    <div class="flex gap-3">
+        <input type="text" name="task" placeholder="Enter a new task" class="border p-2 w-full mb-2" required>
+        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded ">Add Task</button>
+    </div>
+</form>
+
+{% if tasks %}
+<div class="bg-white p-4 rounded shadow">
+    <h2 class="text-2xl font-bold mb-3">Current Tasks</h2>
+    <ul>
+        {% for task in tasks %}
+        <li class="mb-2">
+            <form method="POST" action="/todo/update" class="inline">
+                <input type="hidden" name="task_index" value="{{ loop.index0 }}">
+                <input type="text" name="updated_task" value="{{ task }}" class="border p-1" {% if not task_editable[loop.index0] %}readonly{% endif %}>
+                {% if task_editable[loop.index0] %}
+                <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded">Save</button>
+                {% endif %}
+            </form>
+            <form method="POST" action="/todo/complete" class="inline">
+                <input type="hidden" name="task_index" value="{{ loop.index0 }}">
+                <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded">Completed</button>
+            </form>
+            <form method="POST" action="/todo/edit" class="inline">
+                <input type="hidden" name="task_index" value="{{ loop.index0 }}">
+                <button type="submit" class="bg-yellow-500 text-white px-2 py-1 rounded">Edit</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+{% endblock %} 
