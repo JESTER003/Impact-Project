@@ -29,8 +29,8 @@ Follow these instructions to set up and run the project locally.
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/devtools-suite.git
-   cd devtools-suite
+   git clone https://github.com/jester003/Impact-Project.git
+   cd Impact-Project
    ```
 
 2. **Create a virtual environment**:
