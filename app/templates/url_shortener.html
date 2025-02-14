@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}URL Shortener{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <!-- Header Section -->
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
+            URL Shortener
+        </h1>
+        <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
+            <div class="flex items-start space-x-4 mb-6">
+                <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-blue-900/50 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <p class="text-gray-300 text-lg text-left">
+                        This feature uses hashing to convert long URLs into short, unique identifiers. Hashing is a technique that maps data of arbitrary size to fixed-size values, making it efficient for quick lookups and ensuring uniqueness.
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-center bg-yellow-900/20 border border-yellow-700/50 rounded-lg p-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-400 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <p class="text-yellow-300 text-lg">Copy the new shortened URL within 5 seconds before it disappears!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- URL Input Form -->
+    <form method="POST" action="/url-shortener" class="mb-8">
+        <div class="flex flex-col sm:flex-row gap-3">
+            <div class="flex-1">
+                <input 
+                    type="text" 
+                    name="long_url" 
+                    placeholder="Enter your long URL here..." 
+                    class="w-full bg-gray-800 border border-gray-700 text-gray-100 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    required
+                >
+            </div>
+            <button 
+                type="submit" 
+                class="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 flex items-center justify-center whitespace-nowrap"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                </svg>
+                Make it Short
+            </button>
+        </div>
+    </form>
+
+    <!-- Error Message -->
+    {% if error_message %}
+    <div class="bg-red-900/50 border border-red-700 text-red-200 p-4 rounded-lg mb-6 flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        {{ error_message }}
+    </div>
+    {% endif %}
+
+    <!-- Short URL Result -->
+    {% if short_url %}
+    <div id="short-url-container" class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700 transition-all duration-300">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex-1 min-w-0">
+                <p class="text-lg text-gray-300 mb-2">Your shortened URL:</p>
+                <a href="{{ short_url }}" target="_blank" class="text-blue-400 hover:text-blue-300 transition-colors duration-200 break-all">
+                    {{ short_url }}
+                </a>
+            </div>
+            <button 
+                onclick="copyToClipboard('{{ short_url }}')"
+                class="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg transition-colors duration-200 flex items-center whitespace-nowrap"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-2M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                </svg>
+                Copy URL
+            </button>
+        </div>
+        <div class="mt-4 bg-blue-900/20 border border-blue-700/50 rounded-lg p-3">
+            <p class="text-blue-300 text-sm flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                This shortened URL will disappear in 5 seconds. Make sure to copy it!
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                // Create a temporary success message
+                const container = document.getElementById('short-url-container');
+                const message = document.createElement('div');
+                message.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300';
+                message.textContent = 'URL copied to clipboard!';
+                document.body.appendChild(message);
+                
+                // Remove the message after 2 seconds
+                setTimeout(() => {
+                    message.style.opacity = '0';
+                    setTimeout(() => {
+                        document.body.removeChild(message);
+                    }, 300);
+                }, 2000);
+            }, function(err) {
+                console.error('Could not copy text: ', err);
+            });
+        }
+
+        // Fade out and remove the short URL container after 5 seconds
+        setTimeout(function() {
+            const container = document.getElementById('short-url-container');
+            if (container) {
+                container.style.opacity = '0';
+                setTimeout(() => {
+                    container.style.display = 'none';
+                }, 300);
+            }
+        }, 5000);
+    </script>
+    {% endif %}
+</div>
+{% endblock %}

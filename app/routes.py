@@ -89,90 +89,101 @@ def update_task():
 
 @main.route('/expression-converter', methods=['GET', 'POST'])
 def expression_converter():
-    """Handles input from the form and evaluates the expression."""
     result = None
+    
     if request.method == 'POST':
-        expression = request.form['expression']
-        print(f"Received expression: {expression}")  # Debugging line
+        expression = request.form.get('expression', '').strip()
+        conversion_type = request.form.get('conversion_type')
+        
         try:
-            postfix_expr = infix_to_postfix(expression)
-            print(f"Postfix expression: {postfix_expr}")  # Debugging line
-            
-            # Check if the expression contains variables (A-Z or a-z)
-            if re.search(r'[a-zA-Z]', expression):
-                result = f"Postfix: {postfix_expr} | Evaluated Result: Cannot evaluate expression with variables."
-            else:
-                evaluated_result = evaluate_postfix(postfix_expr)
-                print(f"Evaluated result: {evaluated_result}")  # Debugging line
-                result = f"Postfix: {postfix_expr} | Evaluated Result: {evaluated_result}"
+            if conversion_type == 'infix_to_postfix':
+                converted = infix_to_postfix(expression)
+            else:  # postfix_to_infix
+                converted = postfix_to_infix(expression)
+                
+            result = {
+                'input': expression,
+                'output': converted
+            }
         except Exception as e:
-            result = f"Error: {str(e)}"
-            print(f"Error: {str(e)}")  # Debugging line
+            result = {
+                'input': expression,
+                'output': f"Error: {str(e)}"
+            }
     
     return render_template('expression_converter.html', result=result)
 
 def infix_to_postfix(expression):
-    """Convert infix expression to postfix using the Shunting Yard Algorithm."""
-    precedence = {'+': 1, '-': 1, '*': 2, '/': 2, '^': 3}  # Operator precedence
-    associativity = {'+': 'L', '-': 'L', '*': 'L', '/': 'L', '^': 'R'}  # Left/Right associative
-    output = []  # Stores final postfix expression
-    stack = []  # Operator stack
-
-    # Tokenizing the input expression (Supports numbers and variables A-Z)
-    tokens = re.findall(r'\d+(\.\d+)?|[a-zA-Z]+|[+\-*/^()]', expression.replace(" ", ""))
-
-    for token in tokens:
-        if re.match(r'\d+(\.\d+)?', token) or re.match(r'[a-zA-Z]+', token):  # If it's a number or variable
-            output.append(token)
-        elif token in precedence:  # If it's an operator
-            while (stack and stack[-1] != '(' and
-                   (precedence.get(stack[-1], 0) > precedence[token] or
-                    (precedence.get(stack[-1], 0) == precedence[token] and associativity[token] == 'L'))):
-                output.append(stack.pop())
-            stack.append(token)
-        elif token == '(':  # Left parenthesis
-            stack.append(token)
-        elif token == ')':  # Right parenthesis
-            while stack and stack[-1] != '(':
-                output.append(stack.pop())
-            if not stack:
-                raise ValueError("Mismatched parentheses")
-            stack.pop()  # Remove '('
-
-    while stack:  # Pop remaining operators
-        if stack[-1] in '()':
+    """Convert infix expression to postfix."""
+    # Define operator precedence
+    precedence = {'+': 1, '-': 1, '*': 2, '/': 2, '^': 3}
+    
+    # Initialize empty lists for output and operator stack
+    output = []
+    operators = []
+    
+    # Split the expression into tokens
+    tokens = expression.replace(' ', '')
+    
+    # Process each character in the expression
+    i = 0
+    while i < len(tokens):
+        token = tokens[i]
+        
+        # If token is a number, add it to output
+        if token.isdigit():
+            num = ''
+            while i < len(tokens) and (tokens[i].isdigit() or tokens[i] == '.'):
+                num += tokens[i]
+                i += 1
+            output.append(num)
+            i -= 1
+            
+        # If token is an opening parenthesis, push to operators
+        elif token == '(':
+            operators.append(token)
+            
+        # If token is a closing parenthesis, process until matching opening parenthesis
+        elif token == ')':
+            while operators and operators[-1] != '(':
+                output.append(operators.pop())
+            if operators:
+                operators.pop()  # Remove '('
+                
+        # If token is an operator
+        elif token in precedence:
+            while (operators and operators[-1] != '(' and 
+                   precedence.get(operators[-1], 0) >= precedence[token]):
+                output.append(operators.pop())
+            operators.append(token)
+            
+        i += 1
+    
+    # Pop remaining operators to output
+    while operators:
+        if operators[-1] == '(':
             raise ValueError("Mismatched parentheses")
-        output.append(stack.pop())
+        output.append(operators.pop())
+    
+    return ' '.join(output)
 
-    return " ".join(output)
-
-def evaluate_postfix(expression):
-    """Evaluate a postfix expression using a stack."""
+def postfix_to_infix(expression):
+    """Convert postfix expression to infix."""
     stack = []
     tokens = expression.split()
-
+    
     for token in tokens:
-        if re.match(r'\d+(\.\d+)?', token):  # If it's a number
-            stack.append(float(token))
-        else:  # It's an operator
+        if token.replace('.', '').isdigit():  # If token is a number
+            stack.append(token)
+        elif token in {'+', '-', '*', '/', '^'}:  # If token is an operator
             if len(stack) < 2:
-                raise ValueError("Invalid Expression")
-            b, a = stack.pop(), stack.pop()  # Pop two operands
-            if token == '+':
-                stack.append(a + b)
-            elif token == '-':
-                stack.append(a - b)
-            elif token == '*':
-                stack.append(a * b)
-            elif token == '/':
-                if b == 0:
-                    raise ValueError("Division by zero")
-                stack.append(a / b)
-            elif token == '^':
-                stack.append(a ** b)
+                raise ValueError("Invalid postfix expression")
+            b = stack.pop()
+            a = stack.pop()
+            stack.append(f"({a} {token} {b})")
     
     if len(stack) != 1:
-        raise ValueError("Invalid Expression")
+        raise ValueError("Invalid postfix expression")
     
-    return stack.pop()
+    return stack[0]
 
