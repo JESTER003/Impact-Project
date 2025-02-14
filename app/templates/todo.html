@@ -3,48 +3,116 @@
 {% block title %}To-Do App{% endblock %}
 
 {% block content %}
-<h1 class="text-3xl font-bold mb-5">To-Do App</h1>
-<p class="mb-5 text-lg">
-    This To-Do app uses the stack data structure to manage tasks. A stack is a collection of elements with two main operations: <strong>push</strong> and <strong>pop</strong>. 
-    <ul class="list-disc list-inside">
-        <li><strong>Push:</strong> When you add a new task, it is placed on top of the stack. This means the most recently added task is always at the top, ready to be completed first.</li>
-        <li><strong>Pop:</strong> When you mark a task as completed, it is removed from the top of the stack. This follows the Last In, First Out (LIFO) principle, where the last task added is the first to be removed.</li>
-    </ul>
-    This approach is useful for managing tasks that need to be addressed in the order they were added, ensuring that the most recent tasks are prioritized.
-</p>
-
-<form method="POST" action="/todo" class="my-5">
-    <div class="flex gap-3">
-        <input type="text" name="task" placeholder="Enter a new task" class="border p-2 w-full mb-2" required>
-        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded ">Add Task</button>
+<div class="max-w-4xl mx-auto">
+    <!-- Header Section -->
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
+            To-Do App
+        </h1>
+        <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
+            <p class="text-gray-300 text-lg mb-6">
+                This To-Do app uses the stack data structure to manage tasks. A stack is a collection of elements with two main operations: <strong class="text-blue-400">push</strong> and <strong class="text-purple-400">pop</strong>.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+                <div class="bg-gray-900/50 p-4 rounded-lg border border-gray-700">
+                    <div class="flex items-center mb-2">
+                        <div class="w-8 h-8 rounded-lg bg-blue-900/50 flex items-center justify-center mr-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            </svg>
+                        </div>
+                        <strong class="text-blue-400 text-lg">Push:</strong>
+                    </div>
+                    <p class="text-gray-400">When you add a new task, it is placed on top of the stack. This means the most recently added task is always at the top, ready to be completed first.</p>
+                </div>
+                <div class="bg-gray-900/50 p-4 rounded-lg border border-gray-700">
+                    <div class="flex items-center mb-2">
+                        <div class="w-8 h-8 rounded-lg bg-purple-900/50 flex items-center justify-center mr-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                            </svg>
+                        </div>
+                        <strong class="text-purple-400 text-lg">Pop:</strong>
+                    </div>
+                    <p class="text-gray-400">When you mark a task as completed, it is removed from the top of the stack. This follows the Last In, First Out (LIFO) principle, where the last task added is the first to be removed.</p>
+                </div>
+            </div>
+        </div>
     </div>
-</form>
 
-{% if tasks %}
-<div class="bg-white p-4 rounded shadow">
-    <h2 class="text-2xl font-bold mb-3">Current Tasks</h2>
-    <ul>
-        {% for task in tasks %}
-        <li class="mb-2">
-            <form method="POST" action="/todo/update" class="inline">
-                <input type="hidden" name="task_index" value="{{ loop.index0 }}">
-                <input type="text" name="updated_task" value="{{ task }}" class="border p-1" {% if not task_editable[loop.index0] %}readonly{% endif %}>
-                {% if task_editable[loop.index0] %}
-                <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded">Save</button>
-                {% endif %}
-            </form>
-            <form method="POST" action="/todo/complete" class="inline">
-                <input type="hidden" name="task_index" value="{{ loop.index0 }}">
-                <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded">Completed</button>
-            </form>
-            <form method="POST" action="/todo/edit" class="inline">
-                <input type="hidden" name="task_index" value="{{ loop.index0 }}">
-                <button type="submit" class="bg-yellow-500 text-white px-2 py-1 rounded">Edit</button>
-            </form>
-        </li>
-        {% endfor %}
-    </ul>
+    <!-- Add Task Form -->
+    <form method="POST" action="/todo" class="mb-8">
+        <div class="flex flex-col sm:flex-row gap-3">
+            <input 
+                type="text" 
+                name="task" 
+                placeholder="Enter a new task" 
+                class="flex-1 bg-gray-800 border border-gray-700 text-gray-100 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                required
+            >
+            <button 
+                type="submit" 
+                class="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 flex items-center justify-center"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                Add Task
+            </button>
+        </div>
+    </form>
+
+    <!-- Tasks List -->
+    {% if tasks %}
+    <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
+        <h2 class="text-2xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">Current Tasks</h2>
+        <ul class="space-y-4">
+            {% for task in tasks %}
+            <li class="bg-gray-900/50 rounded-lg p-4 border border-gray-700">
+                <div class="flex flex-wrap gap-3 items-center">
+                    <form method="POST" action="/todo/update" class="flex-1 min-w-0">
+                        <input type="hidden" name="task_index" value="{{ loop.index0 }}">
+                        <input 
+                            type="text" 
+                            name="updated_task" 
+                            value="{{ task }}" 
+                            class="w-full bg-gray-800 border border-gray-700 text-gray-100 p-2 rounded-lg {% if not task_editable[loop.index0] %}cursor-not-allowed{% endif %}"
+                            {% if not task_editable[loop.index0] %}readonly{% endif %}
+                        >
+                        {% if task_editable[loop.index0] %}
+                        <button type="submit" class="mt-2 inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            Save
+                        </button>
+                        {% endif %}
+                    </form>
+                    <div class="flex gap-2">
+                        <form method="POST" action="/todo/complete">
+                            <input type="hidden" name="task_index" value="{{ loop.index0 }}">
+                            <button type="submit" class="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors duration-200">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Complete
+                            </button>
+                        </form>
+                        <form method="POST" action="/todo/edit">
+                            <input type="hidden" name="task_index" value="{{ loop.index0 }}">
+                            <button type="submit" class="inline-flex items-center px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition-colors duration-200">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                </svg>
+                                Edit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
 </div>
-{% endif %}
-
-{% endblock %} 
+{% endblock %}

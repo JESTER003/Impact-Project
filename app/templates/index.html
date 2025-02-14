@@ -1,33 +1,121 @@
 {% extends "base.html" %}
 
-{% block title %}Main Page{% endblock %}
+{% block title %}DevTools Hub{% endblock %}
 
 {% block content %}
-<div class="">
-    <div class="text-black py-10">
-        <h1 class="text-4xl font-extrabold mb-5">Welcome to the DevTools</h1>
-        <p class="text-lg mb-5">Explore a collection of tools designed to enhance your productivity and streamline your
-            workflow.</p>
-        <div class="space-x-4">
-            <button class="bg-blue-700 hover:bg-blue-800 text-black px-4 py-2 rounded"
-                onclick="location.href='/url-shortener'">URL Shortener</button>
-            <button class="bg-green-700 hover:bg-green-800 text-black px-4 py-2 rounded"
-                onclick="location.href='/todo'">To-Do App</button>
-            <button class="bg-purple-700 hover:bg-purple-800 text-black px-4 py-2 rounded"
-                onclick="location.href='/chat'">Realtime Chat-App</button>
+<div class="min-h-screen bg-gray-900 text-gray-100">
+    <!-- Hero Section -->
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+                Welcome to DevTools
+            </h1>
+            <p class="text-lg sm:text-xl text-gray-300 mb-10">
+                Explore our collection of powerful tools designed to enhance your productivity and streamline your workflow.
+            </p>
+            
+            <!-- Tools Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-3xl mx-auto ">
+                <!-- URL Shortener Card -->
+                <div class="group hover:scale-105 transition-transform duration-300">
+                    <button 
+                        onclick="location.href='/url-shortener'"
+                        class="w-full bg-gray-800 hover:bg-gray-700 p-6 rounded-xl border border-gray-700 hover:border-blue-500 transition-all duration-300"
+                    >
+                        <div class="text-blue-400 mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">URL Shortener</h3>
+                        <p class="text-gray-400 text-sm">Convert long URLs into short, manageable links</p>
+                    </button>
+                </div>
+
+                <!-- Todo App Card -->
+                <div class="group hover:scale-105 transition-transform duration-300">
+                    <button 
+                        onclick="location.href='/todo'"
+                        class="w-full bg-gray-800 hover:bg-gray-700 p-6 rounded-xl border border-gray-700 hover:border-green-500 transition-all duration-300"
+                    >
+                        <div class="text-green-400 mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">To-Do App</h3>
+                        <p class="text-gray-400 text-sm">Manage tasks efficiently with stack-based approach</p>
+                    </button>
+                </div>
+
+                <!-- New Expression Converter Card -->
+                <div class="group hover:scale-105 transition-transform duration-300">
+                    <button 
+                        onclick="location.href='/expression-converter'"
+                        class="w-full bg-gray-800 hover:bg-gray-700 p-6 rounded-xl border border-gray-700 hover:border-purple-500 transition-all duration-300"
+                    >
+                        <div class="text-purple-400 mb-3 ">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Expression Converter</h3>
+                        <p class="text-gray-400 text-sm">Evaluate and convert complex mathematical expressions</p>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="container text-black mx-auto px-4 py-10">
-        <h2 class="text-3xl font-bold mb-4">Project Details</h2>
-        <p class="text-lg mb-4">This project is a demonstration of various web tools built using Flask and Tailwind CSS.
-            Each tool showcases different functionalities and concepts:</p>
-        <ul class="list-disc list-inside text-lg">
-            <li><strong>URL Shortener:</strong> Convert long URLs into short, manageable links using hashing techniques.
-            </li>
-            <li><strong>To-Do App:</strong> Manage your tasks efficiently with a stack-based approach.</li>
-            <li><strong>Realtime Chat-App:</strong> Engage in real-time communication using graph-based concepts.</li>
-        </ul>
+    <!-- Project Details Section -->
+    <div class="bg-gray-800 py-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-8 text-center">Project Details</h2>
+                <div class="bg-gray-900 rounded-2xl p-6 md:p-8 shadow-xl">
+                    <p class="text-gray-300 text-lg mb-6">
+                        This project is a demonstration of various web tools built using Flask and Tailwind CSS. Each tool showcases different functionalities and concepts:
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-blue-900/50 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-blue-400">URL Shortener</h3>
+                                <p class="text-gray-400 mt-1">Convert long URLs into short, manageable links using advanced hashing techniques.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-green-900/50 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-green-400">To-Do App</h3>
+                                <p class="text-gray-400 mt-1">Manage your tasks efficiently with a stack-based approach for optimal organization.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-purple-900/50 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-purple-400">Expression Converter</h3>
+                                <p class="text-gray-400 mt-1">Evaluate and convert complex mathematical expressions</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

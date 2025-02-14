@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Expression Converter & Calculator{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-5">Expression Converter & Calculator</h1>
+<p class="mb-5 text-lg">A calculator that evaluates and converts complex mathematical expressions using stack-based parsing.</p>
+
+<!-- Description of DSA Topics -->
+<h2 class="text-2xl font-semibold mb-4">Data Structures and Algorithms Used:</h2>
+<ul class="list-disc list-inside mb-5">
+    <li><strong>Stacks</strong>: Used for parsing and evaluating expressions.</li>
+    <li><strong>Infix to Postfix Conversion</strong>: Converts expressions from infix notation (e.g., A + B) to postfix notation (e.g., AB+).</li>
+    <li><strong>Expression Evaluation</strong>: Evaluates the final expression after conversion.</li>
+</ul>
+
+<!-- Expression Input Form -->
+<form method="POST" class="mb-5">
+    <input type="text" name="expression" 
+           placeholder="Enter mathematical expression (e.g., (3 + 5) * 2)" 
+           class="border p-2 rounded text-black w-full" required>
+    <button type="submit" class="bg-blue-500 text-white p-2 rounded mt-2 w-full">
+        Convert & Evaluate
+    </button>
+</form>
+
+<!-- Display Results -->
+{% if result %}
+    {% set parts = result.split('|') %}
+    <div class="mt-5 p-4 bg-gray-900 rounded">
+        <h2 class="text-xl font-semibold">Results:</h2>
+        <p><strong>Postfix Expression:</strong> {{ parts[0].replace('Postfix: ', '') if parts|length > 0 else 'N/A' }}</p>
+        <p><strong>Evaluated Result:</strong> {{ parts[1].replace('Evaluated Result: ', '') if parts|length > 1 else 'N/A' }}</p>
+    </div>
+{% else %}
+    <div class="mt-5 p-4 bg-gray-900 rounded">
+        <h2 class="text-xl font-semibold">Results:</h2>
+        <p>No result to display.</p>
+    </div>
+{% endif %}
+{% endblock %}
